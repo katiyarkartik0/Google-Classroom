@@ -1,0 +1,6 @@
+.Header-add-apps-acc {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    justify-content:space-around;
+}
