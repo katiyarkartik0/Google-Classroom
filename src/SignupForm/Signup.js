@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { auth } from '../lib/firebase';
 import firebase from 'firebase'
 import 'firebase/firestore'
@@ -13,6 +13,7 @@ export const Signup = () => {
     let [password, setPassword] = useState("");
     let [confirmPassword, setConfirmPassword] = useState("");
     let user = useContext(authContext);
+ 
     return (
 
         <div>
@@ -62,14 +63,7 @@ export const Signup = () => {
                     e.preventDefault();
                     if (password === confirmPassword) {
                         
-                        auth.createUserWithEmailAndPassword(email, password).then(()=>{
-                            let user = auth.currentUser;
-                            if(user){
-                                user.updateProfile({
-                                    displayName:displayName,
-                                })
-                            }
-                        })
+                        auth.createUserWithEmailAndPassword(email, password)
                     }
                     else {
                         alert("password did not match");

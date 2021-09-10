@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,6 +13,9 @@ import Avatar from '@material-ui/core/Avatar';
 import { TextField } from '@material-ui/core';
 import { useContext } from 'react';
 import { authContext } from '../AuthProvider';
+import LetteredAvatar from 'lettered-avatar'
+import { firestore } from '../lib/firebase';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +38,40 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FullScreenDialog(props) {
     const classes = useStyles();
     let user = useContext(authContext);
-
-
+    let [classCode, setClassCode] = useState("");
+    let [ownersEmail, setOwnersEmail] = useState("");
+    let [error, setError] = useState("");
+    let [joinedData, setJoinedData] = useState("");
+    let [classExists, setClassExists] = useState("");
+    let handleSubmit=(e)=>{
+        e.preventDefault();
+        firestore.collection('Created Classes')
+        .doc(ownersEmail)
+        .collection('classes')
+        .doc(classCode)
+        .get().then((doc)=>{
+            if(doc.exists && ownersEmail !== user.email){
+                setClassExists(true);
+                setJoinedData(doc.data());
+                setError(false);
+            }
+            else{
+                setClassExists(false);
+                setError(true);
+                return
+            }
+        
+        })
+        if(classExists===true){
+            firestore.collection('Joined Classes')
+            .doc(user.email)
+            .collection('classes')
+            .doc(classCode)
+            .set({
+                joinedData,
+            })
+        }
+    }
     return (
         <div>
             <Dialog fullScreen open={props.valueJoin.openJoin} onClose={props.valueJoin.handleCloseJoin} TransitionComponent={Transition}>
@@ -60,13 +95,13 @@ export default function FullScreenDialog(props) {
                         </p>
                         <div className="joinClass__loginInfo">
                             <div className="joinClass__classLeft">
-                                <Avatar src={user?user.photoURL:""} />
+                                <LetteredAvatar name={user && !(user.photoURL) ? `${user.displayName}` : ""} />
                                 <div className="joinClass__loginText">
                                     <div className="joinClass__loginName">
-                                        {user?user.displayName:""}
+                                        {user ? user.displayName : ""}
                                     </div>
                                     <div className="joinClass__loginEmail">
-                                        {user?user.email:""}
+                                        {user ? user.email : ""}
                                     </div>
                                 </div>
                             </div>
@@ -86,6 +121,12 @@ export default function FullScreenDialog(props) {
                             label="Class Code"
                             type="email"
                             fullWidth
+                            value={classCode}
+                            onChange={(e) => {
+                                setClassCode(e.currentTarget.value);
+                            }}
+                            error={error}
+                            helperText={error && "No class exist"}
                         />
                         <TextField
                             autoFocus
@@ -94,7 +135,19 @@ export default function FullScreenDialog(props) {
                             label="Owner's Email"
                             type="email"
                             fullWidth
+                            value={ownersEmail}
+                            onChange={(e) => {
+                                setOwnersEmail(e.currentTarget.value);
+                            }}
+                            error={error}
+                            helperText={error && "No class exist"}
+
                         />
+                        <Button onClick={handleSubmit}
+                        variant="outlined" color="primary">
+                            JOIN
+                        </Button>
+
 
                     </div>
                 </div>

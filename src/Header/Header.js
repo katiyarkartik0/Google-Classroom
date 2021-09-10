@@ -7,16 +7,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import AppsIcon from '@material-ui/icons/Apps';
-import Avatar from '@material-ui/core/Avatar';
 import { auth } from '../lib/firebase';
-
+import LetteredAvatar from 'lettered-avatar'
 import "./Header.css"
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
 import { authContext } from '../AuthProvider';
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +38,7 @@ export default function DenseAppBar(props) {
   let user = useContext(authContext);
 
 
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -62,13 +59,14 @@ export default function DenseAppBar(props) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} onClick={props.combinedValue.valueJoin.handleClickOpenJoin}>Join Class</MenuItem>
-              <MenuItem onClick={handleClose} onClick={props.combinedValue.value.handleClickOpen}>Create Class</MenuItem>
+              <MenuItem  onClick={props.combinedValue.valueJoin.handleClickOpenJoin}>Join Class</MenuItem>
+              <MenuItem  onClick={props.combinedValue.value.handleClickOpen}>Create Class</MenuItem>
 
             </Menu>
 
             <AppsIcon />
-            <Avatar src={user ? user.photoURL : ""} />
+            <LetteredAvatar name={user && !(user.photoURL)?`${user.displayName}`:""}
+            imgSrc={user ? user.photoURL : ""}  />
             <button
               onClick={() => {
                 auth.signOut();
