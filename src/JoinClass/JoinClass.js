@@ -95,7 +95,8 @@ export default function FullScreenDialog(props) {
                         </p>
                         <div className="joinClass__loginInfo">
                             <div className="joinClass__classLeft">
-                                <LetteredAvatar name={user && !(user.photoURL) ? `${user.displayName}` : ""} />
+                                <LetteredAvatar name={user && !(user.photoURL) ? `${user.displayName}` : ""} 
+                                imgSrc={user ? user.photoURL : ""} />
                                 <div className="joinClass__loginText">
                                     <div className="joinClass__loginName">
                                         {user ? user.displayName : ""}

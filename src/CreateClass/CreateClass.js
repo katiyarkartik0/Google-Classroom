@@ -22,6 +22,8 @@ export default function FormDialog(props) {
 
   let user = useContext(authContext);
   let creatorEmail = user?user.email:"";
+  let creatorPhotoURL = user?user.photoURL:"";
+
 
 
 
@@ -36,6 +38,7 @@ export default function FormDialog(props) {
       .collection('classes')
       .doc(id).set({
         owner: creatorEmail,
+        //photoURL:creatorPhotoURL,
         className: className,
         section: section,
         subject: subject,

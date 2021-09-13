@@ -6,6 +6,9 @@ import { useContext } from 'react';
 import { authContext } from './AuthProvider';
 import { Redirect } from "react-router";
 import { firestore } from "./lib/firebase";
+import { CardUI } from "./ClassCardUI/CardUI"
+import './Home.css';
+import { ListItem } from "@material-ui/core";
 export const Home = () => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -28,8 +31,8 @@ export const Home = () => {
   let combinedValue = { value, valueJoin }
 
 
-  const [createdClasses, setCreatedClasses] = useState("");
-  const [joinedClasses, setJoinedClasses] = useState("");
+  const [createdClasses, setCreatedClasses] = useState([]);
+  const [joinedClasses, setJoinedClasses] = useState([]);
 
   useEffect(()=>{
     if(user){
@@ -37,15 +40,13 @@ export const Home = () => {
       .doc(user.email)
       .collection('classes')
       .onSnapshot((snapshot)=>{
-        snapshot.docs.map((doc)=>{
-          setCreatedClasses(doc.data())
-        })
+        setCreatedClasses(snapshot.docs.map((doc)=>doc.data()))
       })
       return()=>{
         unsub();
       }
     }
-  },[])
+  },[user])
 
   useEffect(()=>{
     if(user){
@@ -53,24 +54,19 @@ export const Home = () => {
       .doc(user.email)
       .collection('classes')
       .onSnapshot((snapshot)=>{
-        snapshot.docs.map((doc)=>{
-          setJoinedClasses(doc.data().joinedData)
-        })
+        setJoinedClasses(snapshot.docs.map((doc)=>doc.data().joinedData))
       })
       return()=>{
         unsub();
       }
     }
-  },[])
+  },[user])
  
 
-  console.log(joinedClasses);
-
-
-
-
-
-
+  //console.log(createdClasses);
+  joinedClasses.forEach(element=>{
+    console.log(element);
+  })
   return (
     <div>
       {user ? "" : <Redirect to="/login" />}
@@ -78,6 +74,17 @@ export const Home = () => {
       <Header combinedValue={combinedValue} />
       <CreateClass value={value} />
       <JoinClass valueJoin={valueJoin} />
+      <div className="dashboard">
+        {joinedClasses.map((item)=>{
+          return <CardUI data={item} status="Joined Class"/>;
+        }
+        )}
+        {createdClasses.map((item)=>{
+          return <CardUI data={item} status="Created Classes"/>;
+        }
+        )}
+      </div>
+
     </div>
   )
 }
