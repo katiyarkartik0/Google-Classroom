@@ -38,6 +38,8 @@ export const CardUI = (props) => {
             <small class ="text-muted">
             <div>Professor : {props.data.owner}</div>
             <div>Status : {props.status}</div>
+            <div>Class : {props.data.className + " " + props.data.section}</div>
+ 
             </small>
             </div>
         </div>

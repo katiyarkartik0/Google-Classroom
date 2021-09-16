@@ -26,14 +26,25 @@ const useStyles = makeStyles((theme) => ({
 export default function DenseAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorE2, setAnchorE2] = React.useState(null);
 
-  const handleClick = (event) => {
+
+  const handleClick1 = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose1 = () => {
     setAnchorEl(null);
   };
+
+  const handleClick2 = (event) => {
+    setAnchorE2(event.currentTarget);
+  };
+
+  const handleClose2 = () => {
+    setAnchorE2(null);
+  };
+
 
   let user = useContext(authContext);
 
@@ -51,27 +62,51 @@ export default function DenseAppBar(props) {
             Classroom
           </Typography>
           <div className="Header-add-apps-acc">
-            <AddIcon onClick={handleClick} />
+            <AddIcon onClick={handleClick1} />
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
-              onClose={handleClose}
+              onClose={handleClose1}
             >
-              <MenuItem  onClick={props.combinedValue.valueJoin.handleClickOpenJoin}>Join Class</MenuItem>
-              <MenuItem  onClick={props.combinedValue.value.handleClickOpen}>Create Class</MenuItem>
+              <MenuItem onClick={props.combinedValue.valueJoin.handleClickOpenJoin}>Join Class</MenuItem>
+              <MenuItem onClick={props.combinedValue.value.handleClickOpen}>Create Class</MenuItem>
 
             </Menu>
 
             <AppsIcon />
-            <LetteredAvatar name={user && !(user.photoURL)?`${user.displayName}`:""}
-            imgSrc={user ? user.photoURL : ""}  />
-            <button
-              onClick={() => {
-                auth.signOut();
-              }}
-              type="button" className="btn btn-danger">LOGOUT</button>
+            <div>
+              <div className="dropdown">
+                <div className="container">
+                  <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <LetteredAvatar
+                      name={user && !(user.photoURL) ? `${user.displayName}` : ""}
+                      imgSrc={user ? user.photoURL : ""} />
+                  </button>
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" >
+
+                    <li><a className="dropdown-item">
+                    <LetteredAvatar
+                      name={user && !(user.photoURL) ? `${user.displayName}` : ""}
+                      imgSrc={user ? user.photoURL : ""} />
+                      </a></li>
+                    <li><a className="dropdown-item"><h5>{user?user.email:""}</h5></a></li>
+                    <li><a className="dropdown-item">
+                    <button
+                      onClick={() => {
+                        auth.signOut();
+                      }}
+                      type="button" className="btn btn-danger">LOGOUT</button>
+                      </a></li>
+
+            
+                  </ul>
+                </div>
+              </div>
+
+
+            </div>
 
           </div>
 
