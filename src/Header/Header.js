@@ -57,7 +57,6 @@ export default function DenseAppBar(props) {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="" />
           <Typography variant="h6" color="inherit">
             Classroom
           </Typography>
