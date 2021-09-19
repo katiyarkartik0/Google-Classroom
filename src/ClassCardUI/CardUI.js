@@ -39,8 +39,12 @@ export const CardUI = (props) => {
                         <h6>{props.data.id}</h6>
                         <button
                             onClick={() => {
-                                history.push(`/enteredClass/${props.data.id}`)
-                                console.log(props.data.id);
+                                history.push({
+                                    pathname: `/enteredClass/${props.data.id}`,
+                                    state: {detail: props.data,
+                                    background: `${imageCollection[props.data.subject.charCodeAt(0) % 11]}`}
+                                })
+                                console.log(props.data);
                             }}
                             type="button" className="btn btn-success">Enter Class</button>
 

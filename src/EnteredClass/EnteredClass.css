@@ -1,0 +1,15 @@
+.theme{
+    width: 1300px;
+    height: 250px;
+    object-fit: cover;
+    align-items: center;
+    
+    position: relative;
+    top: 17px;
+}
+.themeDiv{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+        
+}

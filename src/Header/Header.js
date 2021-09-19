@@ -57,6 +57,7 @@ export default function DenseAppBar(props) {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
+          <img src="https://image.flaticon.com/icons/png/512/185/185578.png" width="50" height="50"/>
           <Typography variant="h6" color="inherit">
             Classroom
           </Typography>

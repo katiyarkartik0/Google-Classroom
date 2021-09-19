@@ -6,7 +6,7 @@ import AuthProvider from "./AuthProvider"
 import { Signup } from "./SignupForm/Signup";
 import { EnteredClass } from "./EnteredClass/EnteredClass";
 import { useState } from "react";
-
+import { useLocation } from "react-router-dom";
 
 export const App = () => {
     let [reqCreatedClassObj, setreqCreatedClassObj] = useState([]);
@@ -25,18 +25,11 @@ export const App = () => {
                         <Route exact path="/signup">
                             <Signup />
                         </Route>
-                        {reqCreatedClassObj.map((item, index) => {
-                            return (
-                            <Route key={index} exact path={`/enteredClass/${item.id}`} >
-                                <EnteredClass cardDetails={item}/>
-                            </Route>)}
-                        )}
-                         {reqJoinedClassObj.map((item, index) => {
-                            return (
-                            <Route key={index} exact path={`/enteredClass/${item.id}`} >
-                                <EnteredClass cardDetails={item}/>
-                            </Route>)}
-                        )}
+
+                        <Route path={`/enteredClass/:id`} >
+                            <EnteredClass />
+                        </Route>
+
                     </Switch>
                 </Router>
             </AuthProvider>
