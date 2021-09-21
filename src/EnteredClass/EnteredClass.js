@@ -16,12 +16,35 @@ export const EnteredClass = () => {
     let [announcedText, setannouncedText] = useState("");
     let postInfo = location.state.detail;
     let handlechosenfiles = (e) => {
+        e.preventDefault();
+
         if (e.target.files[0]) {
             setdocument(e.target.files[0]);
         }
     }
-    let handleUpload = () => {
-        if(document===null){
+    let handleUpload = (e) => {
+        e.preventDefault();
+        if(document!==null){
+        let uploadDoc = storage.ref(`document/${document.name}`).put(document);
+        uploadDoc.on('state_changed',null,null,() => {
+            storage.ref('document/').child(document.name).getDownloadURL().then((url) => {
+                firestore.collection('announcements')
+                    .doc('classes')
+                    .collection(location.state.detail.id)
+                    .add({
+                        timestamp: `${firebase.firestore.FieldValue.serverTimestamp()}`,
+                        documentName: document.name,
+                        documentURL: url,
+                        text: announcedText,
+                        sender: user.email
+                    });
+                    setdocument(null);
+            })
+
+        })
+    }
+        else
+        {
             firestore.collection('announcements')
             .doc('classes')
             .collection(location.state.detail.id)
@@ -32,21 +55,6 @@ export const EnteredClass = () => {
                 sender: user.email
             })
         }
-        else{
-        let uploadImage = storage.ref(`document/${document.name}`).put(document);
-        uploadImage.on('state_changed', () => {
-            storage.ref('document/').child(document.name).getDownloadURL().then((url) => {
-                firestore.collection('announcements')
-                    .doc('classes')
-                    .collection(location.state.detail.id)
-                    .add({
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        documentURL: url,
-                        text: announcedText,
-                        sender: user.email
-                    })
-            })
-        })}
     }
 
 
@@ -94,7 +102,6 @@ export const EnteredClass = () => {
                                           <div class="inbox-item">
                                           <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle" alt="" /></div>
                                           <p class="inbox-item-author">{item}</p>
-                                          <p class="inbox-item-text">I've finished it! See you so...</p>
                                       </div></>)
                                     })}
                                     
@@ -139,6 +146,8 @@ export const EnteredClass = () => {
 
                                     <button
                                         onClick={handleUpload}
+                                        
+                        
                                         type="button" className="btn btn-primary">POST
                                     </button>
                                 </div>

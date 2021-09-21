@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { firestore } from '../lib/firebase';
+import './Posts.css'
 export const Posts = (props) => {
     const [posts, setposts] = useState([])
     console.log(props);
@@ -12,19 +13,50 @@ export const Posts = (props) => {
                 .onSnapshot((snap) => {
                     setposts(snap.docs.map((doc) => doc.data()))
                 })
+            return () => {
+                unsubscribe();
+            }
+
         }
     }, [props.postInfo])
     console.log(posts);
     return (
         <div>
-            {posts.map((item) => (
-                <>
-                    <div class="card-box">
-                        <iframe src={item.imageURL}></iframe>
-                        <div>{item.text}</div>
-                    </div>
-                </>
-            ))}
+            {posts.map((item) => {
+                console.log(item)
+                {
+                    if (item.documentURL) {
+                        return (
+                            <>
+                                <div class="card-box">
+                                    <h6>{item.sender}</h6>
+                                    <hr />
+                                    <h7>{item.text}</h7>
+                                    <hr />
+                                    <h4>ATTACHMENT</h4>
+                                    <div className="attachment">
+                                        <h5>{item.documentName}</h5>
+                                        <a href={item.documentURL}>{item.documentURL}
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </>)
+                    } else {
+                        return (
+                            <>
+                                <div class="card-box">
+                                    <h6>{item.sender}</h6>
+                                    <hr />
+                                    <h7>{item.text}</h7>
+                                </div>
+                            </>)
+                    }
+                }
+
+
+            })}
         </div>
     )
 }
