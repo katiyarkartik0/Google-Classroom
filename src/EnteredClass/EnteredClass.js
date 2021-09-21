@@ -6,20 +6,33 @@ import { useLocation } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 import { firestore, storage } from '../lib/firebase';
 import firebase from 'firebase';
+import { Posts } from '../Posts/Posts';
 
-export const EnteredClass = (props) => {
+export const EnteredClass = () => {
     const location = useLocation();
     let user = useContext(authContext);
-    console.log(props);
     console.log(location);
     let [document, setdocument] = useState(null);
     let [announcedText, setannouncedText] = useState("");
+    let postInfo = location.state.detail;
     let handlechosenfiles = (e) => {
         if (e.target.files[0]) {
             setdocument(e.target.files[0]);
         }
     }
     let handleUpload = () => {
+        if(document===null){
+            firestore.collection('announcements')
+            .doc('classes')
+            .collection(location.state.detail.id)
+            .add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                documentURL: null,
+                text: announcedText,
+                sender: user.email
+            })
+        }
+        else{
         let uploadImage = storage.ref(`document/${document.name}`).put(document);
         uploadImage.on('state_changed', () => {
             storage.ref('document/').child(document.name).getDownloadURL().then((url) => {
@@ -33,7 +46,7 @@ export const EnteredClass = (props) => {
                         sender: user.email
                     })
             })
-        })
+        })}
     }
 
 
@@ -68,99 +81,24 @@ export const EnteredClass = (props) => {
 
                             <div class="card-box">
                                 <h4 class="header-title mt-0">Reminder</h4>
-                                <div class="panel-body">
-                                    <p class="text-muted font-13">Hye, I’m Johnathan Doe residing in this beautiful world. I create websites and mobile apps with great UX and UI design. I have done work with big companies like Nokia, Google and Yahoo. Meet me or Contact me for any queries. One Extra line for filling space. Fill as many you want.</p>
-                                    <hr />
-                                    <div class="text-left">
-                                        <p class="text-muted font-13"><strong>Full Name: </strong> <span class="m-l-15">Johnathan Deo</span></p>
-                                        <p class="text-muted font-13"><strong>Mobile: </strong><span class="m-l-15">(+12) 123 1234 567</span></p>
-                                        <p class="text-muted font-13"><strong>Email: </strong> <span class="m-l-15">coderthemes @gmail.com</span></p>
-                                        <p class="text-muted font-13"><strong>Location: </strong> <span class="m-l-15">USA</span></p>
-                                        <p class="text-muted font-13"><strong>Languages: </strong> <span class="m-l-5"><span class="flag-icon flag-icon-us m-r-5 m-t-0" title="us"></span> <span>English</span> </span><span class="m-l-5"><span class="flag-icon flag-icon-de m-r-5" title="de"></span> <span>German</span> </span><span class="m-l-5"><span class="flag-icon flag-icon-es m-r-5" title="es"></span> <span>Spanish</span> </span><span class="m-l-5"><span class="flag-icon flag-icon-fr m-r-5" title="fr"></span> <span>French</span></span>
-                                        </p>
-                                    </div>
-                                    <ul class="social-links list-inline mt-4 mb-0">
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                                        <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
-                                    </ul>
-                                </div>
+                               <h1>UNDER CONSTRUCTION!!</h1>
                             </div>
 
                             <div class="card-box ribbon-box">
-                                <div class="ribbon ribbon-primary">Messages</div>
+                                <div class="ribbon ribbon-primary">People in class</div>
                                 <div class="clearfix"></div>
                                 <div class="inbox-widget">
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Tomaslau</p>
-                                            <p class="inbox-item-text">I've finished it! See you so...</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Stillnotdavid</p>
-                                            <p class="inbox-item-text">This theme is awesome!</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Kurafire</p>
-                                            <p class="inbox-item-text">Nice to meet you</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Shahedk</p>
-                                            <p class="inbox-item-text">Hey! there I'm available...</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Adhamdannaway</p>
-                                            <p class="inbox-item-text">This theme is awesome!</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Tomaslau</p>
-                                            <p class="inbox-item-text">I've finished it! See you so...</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="inbox-item">
-                                            <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" alt="" /></div>
-                                            <p class="inbox-item-author">Stillnotdavid</p>
-                                            <p class="inbox-item-text">This theme is awesome!</p>
-                                            <p class="inbox-item-date">
-                                                <button type="button" class="btn btn-icon btn-sm waves-effect waves-light btn-success">Reply</button>
-                                            </p>
-                                        </div>
-                                    </a>
+                                    {console.log(location.state.detail.joinedStudents)}
+                                    {location.state.detail.joinedStudents.map((item, index)=>{return(<>
+                                        {console.log(item)}
+                                          <div class="inbox-item">
+                                          <div class="inbox-item-img"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle" alt="" /></div>
+                                          <p class="inbox-item-author">{item}</p>
+                                          <p class="inbox-item-text">I've finished it! See you so...</p>
+                                      </div></>)
+                                    })}
+                                    
+                                                                    
                                 </div>
                             </div>
                         </div>
@@ -188,8 +126,8 @@ export const EnteredClass = (props) => {
                             <div class="card-box">
                                 <div class="form-group announcement">
                                     <Avatar className="profile-photo" src={user.photoURL} />
-                                    <textarea 
-                                        value={announcedText} 
+                                    <textarea
+                                        value={announcedText}
                                         onChange={(e) => {
                                             setannouncedText(e.target.value);
                                         }}
@@ -199,16 +137,15 @@ export const EnteredClass = (props) => {
                                     className="document-button" type="file" />
                                 <div className="post-button">
 
-                                    <button 
+                                    <button
                                         onClick={handleUpload}
                                         type="button" className="btn btn-primary">POST
                                     </button>
                                 </div>
 
                             </div>
-                            <div class="card-box">
+                            <Posts postInfo={postInfo} />
 
-                            </div>
                         </div>
 
                     </div>

@@ -6,9 +6,11 @@ import { authContext } from '../AuthProvider';
 import { EnteredClass } from '../EnteredClass/EnteredClass';
 import { BrowserRouter as Router, Switch, Route, BrowserRouter } from 'react-router-dom';
 import './CardUI.css'
+import { firestore } from '../lib/firebase';
 export const CardUI = (props) => {
     let user = useContext(authContext);
     let history = useHistory();
+    console.log(props);
     let imageCollection = [
         "https://i.ytimg.com/vi/oT_8yN5RVow/maxresdefault.jpg",
         "https://i.pinimg.com/originals/0f/70/d6/0f70d6f8985b149d23f7784ee6163d5c.jpg",
@@ -45,6 +47,16 @@ export const CardUI = (props) => {
                                     background: `${imageCollection[props.data.subject.charCodeAt(0) % 11]}`}
                                 })
                                 console.log(props.data);
+                                let joinedStudentsArray = props.data.joinedStudents;
+                                if(props.status==='Joined Class'){
+                                    joinedStudentsArray.push(user.email)
+                                }
+                                firestore.collection('Created Classes')
+                                .doc(props.data.owner)
+                                .collection('classes')
+                                .doc(props.data.id).update({
+                                    joinedStudents:joinedStudentsArray,
+                                })
                             }}
                             type="button" className="btn btn-success">Enter Class</button>
 

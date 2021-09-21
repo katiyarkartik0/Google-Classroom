@@ -54,6 +54,7 @@ export default function FullScreenDialog(props) {
                 setClassExists(true);
                 setJoinedData(doc.data());
                 setError(false);
+                console.log(doc)
             }
             else{
                 setClassExists(false);
@@ -71,6 +72,7 @@ export default function FullScreenDialog(props) {
                 joinedData,
             })
         }
+        console.log(props)
     }
     return (
         <div>

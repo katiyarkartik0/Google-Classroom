@@ -38,12 +38,13 @@ export default function FormDialog(props) {
       .collection('classes')
       .doc(id).set({
         owner: creatorEmail,
-        //photoURL:creatorPhotoURL,
+        photoURL:creatorPhotoURL,
         className: className,
         section: section,
         subject: subject,
         room: Room,
         id: id,
+        joinedStudents:[]
       })
       .then(()=>{
         props.value.handleClose()
