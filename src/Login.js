@@ -1,15 +1,20 @@
 import React from 'react'
 import { signInWithGoogle } from "./lib/firebase"
 import { authContext } from "./AuthProvider"
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useHistory, Redirect } from "react-router-dom";
+import { auth } from './lib/firebase';
 import './Login.css'
 export const Login = () => {
     let user = useContext(authContext);
     console.log(user);
     let history = useHistory();
 
-    
+    let [email, setEmail] = useState("");
+    let [password, setPassword] = useState("");
+    console.log(email);
+    console.log(password);
+
 
     return (
         <>
@@ -22,13 +27,32 @@ export const Login = () => {
                 <form className="col-4">
                     <div className="mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                        <input
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.currentTarget.value)
+                            }}
+                            type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" />
+                        <input
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.currentTarget.value)
+                            }}
+                            type="password" className="form-control" id="exampleInputPassword1" />
                     </div>
-                    <button type="submit" className="btn btn-primary">Sign IN</button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            auth.signInWithEmailAndPassword(email, password).catch((error) => {
+                                const errorCode = error.code;
+                                const errorMessage = error.message;
+                                alert(errorCode)
+                            })
+                        }}
+                        type="submit" className="btn btn-primary">Sign IN</button>
 
 
                 </form>
@@ -46,10 +70,10 @@ export const Login = () => {
             <h5 className="login-option">Don't have an account?</h5>
             <div className="login-option">
                 <button
-                    onClick={()=>{
+                    onClick={() => {
                         history.push("/signup")
                     }}
-                    
+
                     className="btn btn-primary">Sign UP</button>
             </div>
         </>

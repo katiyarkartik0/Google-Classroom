@@ -18,5 +18,6 @@ export const storage = firebase.storage()
 export const signInWithGoogle = ()=>{
     auth.signInWithPopup(provider)
 }
+
 export default firebase;
 

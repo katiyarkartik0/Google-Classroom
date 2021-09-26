@@ -7,13 +7,23 @@ import { useContext } from 'react'
 import { authContext } from '../AuthProvider';
 import { Redirect } from 'react-router';
 
+
 export const Signup = () => {
     let [displayName, setDisplayName] = useState("");
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
     let [confirmPassword, setConfirmPassword] = useState("");
     let user = useContext(authContext);
- 
+
+    let signingUp = ()=>{
+        auth.createUserWithEmailAndPassword(email, password).then((user) =>{
+            auth.onAuthStateChanged (user => {
+              if (user) {
+                user.updateProfile({ 
+                  displayName: displayName
+                })}})})
+    }
+
     return (
 
         <div>
@@ -60,10 +70,10 @@ export const Signup = () => {
                     />
                 </div>
                 <button onClick={(e) => {
+                    
                     e.preventDefault();
                     if (password === confirmPassword) {
-                        
-                        auth.createUserWithEmailAndPassword(email, password)
+                     signingUp()
                     }
                     else {
                         alert("password did not match");

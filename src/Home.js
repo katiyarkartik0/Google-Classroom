@@ -39,6 +39,7 @@ export const Home = (props) => {
   const [joinedClasses, setJoinedClasses] = useState([]);
   props.funk(createdClasses);
   props.funk2(joinedClasses);
+  console.log(user);
 
   useEffect(() => {
     if (user) {

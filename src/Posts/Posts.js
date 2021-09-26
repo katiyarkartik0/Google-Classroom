@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { firestore } from '../lib/firebase';
 import './Posts.css'
+import { Avatar } from '@material-ui/core';
 export const Posts = (props) => {
     const [posts, setposts] = useState([])
     console.log(props);
@@ -26,9 +27,11 @@ export const Posts = (props) => {
                 console.log(item)
                 {
                     if (item.documentURL) {
+                        console.log(item.senderPhoto);
                         return (
                             <>
                                 <div class="card-box">
+                                    <Avatar src={item.senderPhoto}/>
                                     <h6>{item.sender}</h6>
                                     <hr />
                                     <h7>{item.text}</h7>
@@ -47,6 +50,7 @@ export const Posts = (props) => {
                         return (
                             <>
                                 <div class="card-box">
+                                    <Avatar src={item.senderPhoto}/>
                                     <h6>{item.sender}</h6>
                                     <hr />
                                     <h7>{item.text}</h7>

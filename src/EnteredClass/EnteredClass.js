@@ -15,6 +15,7 @@ export const EnteredClass = () => {
     let [document, setdocument] = useState(null);
     let [announcedText, setannouncedText] = useState("");
     let postInfo = location.state.detail;
+    console.log(user)
     let handlechosenfiles = (e) => {
         e.preventDefault();
 
@@ -32,13 +33,13 @@ export const EnteredClass = () => {
                     .doc('classes')
                     .collection(location.state.detail.id)
                     .add({
-                        timestamp: `${firebase.firestore.FieldValue.serverTimestamp()}`,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         documentName: document.name,
                         documentURL: url,
                         text: announcedText,
-                        sender: user.email
+                        sender: user.email,
+                        senderPhoto: user.photoURL
                     });
-                    setdocument(null);
             })
 
         })
@@ -52,7 +53,8 @@ export const EnteredClass = () => {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 documentURL: null,
                 text: announcedText,
-                sender: user.email
+                sender: user.email,
+                senderPhoto: user.photoURL
             })
         }
     }
